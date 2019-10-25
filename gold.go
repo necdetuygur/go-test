@@ -22,7 +22,7 @@ func get(url string) string {
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	str := string(body)
-	return str
+	return str + ""
 }
 
 func paus(){
@@ -36,7 +36,7 @@ func pars(str string, rgx string, key int, clr string) string {
 	return pri
 }
 
-func main() {
+func generate() string {
 	str := get("https://finanswebde.com/altin/gram-altin")
 	a := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 2, "")
 	b := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 7, "")
@@ -50,10 +50,24 @@ func main() {
 	f := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 7, "")
 
 	str = get("http://www.ikd.sadearge.com/Firma/tablo.php")
-	p("  Tarih: " + pars(str, `tarih(.*?)>(.*?)<\/span>`, 2, "Son Güncellenme Tarihi : "))
-	p("   Gram: " + pars(str, `row6_satis(.*?)>(.*?)<\/td>`, 2, "") + " " + a + " " + b + " Oy")
-	p(" Çeyrek: " + pars(str, `row11_satis(.*?)>(.*?)<\/td>`, 2, "") + " " + c + " " + d + " Oy")
-	p("  Yarım: " + pars(str, `row12_satis(.*?)>(.*?)<\/td>`, 2, "") + " " + e + " " + f + " Oy")
+
+	out := ""
+	out += "\n  Tarih: " + pars(str, `tarih(.*?)>(.*?)<\/span>`, 2, "Son Güncellenme Tarihi : ")
+	out += "\n   Gram: " + pars(str, `row6_satis(.*?)>(.*?)<\/td>`, 2, "") + " " + a + " " + b + " Oy"
+	out += "\n Çeyrek: " + pars(str, `row11_satis(.*?)>(.*?)<\/td>`, 2, "") + " " + c + " " + d + " Oy"
+	out += "\n  Yarım: " + pars(str, `row12_satis(.*?)>(.*?)<\/td>`, 2, "") + " " + e + " " + f + " Oy"
+	return out
+}
+
+func main() {
+	p(generate())
+	http.HandleFunc("/", func (w http.ResponseWriter, req *http.Request) {
+		out := generate()
+		p(out)
+		fmt.Fprintln(w, out)
+	})
+
+	http.ListenAndServe(":6010", nil)
 
 	paus()
 }
