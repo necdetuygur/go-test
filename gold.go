@@ -67,7 +67,8 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		out := generate()
 		p(out)
-		fmt.Fprintln(w, out)
+    w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+		fmt.Fprintln(w, "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><pre>" + out + "</pre>")
 	})
 
 	http.ListenAndServe(":6010", nil)
