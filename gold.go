@@ -40,6 +40,7 @@ func pars(str string, rgx string, key int, clr string) string {
 }
 
 func generate() string {
+	newLineStr := "\n         "
 	str := get("https://finanswebde.com/altin/gram-altin")
 	gram_status := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 2, "")
 	gram_value := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 7, "")
@@ -54,11 +55,28 @@ func generate() string {
 
 	str = get("http://www.ikd.sadearge.com/Firma/tablo.php")
 
+	tarih := pars(str, `tarih(.*?)>(.*?)<\/span>`, 2, "Son Güncellenme Tarihi : ")
+
+	gram :=
+		pars(str, `row6_satis(.*?)>(.*?)<\/td>`, 2, "") + "TL" +
+			newLineStr + gram_value + " Oyla" +
+			newLineStr + gram_status
+
+	ceyrek :=
+		pars(str, `row11_satis(.*?)>(.*?)<\/td>`, 2, "") + "TL" +
+			newLineStr + ceyrek_value + " Oyla" +
+			newLineStr + ceyrek_status
+
+	yarim :=
+		pars(str, `row12_satis(.*?)>(.*?)<\/td>`, 2, "") + "TL" +
+			newLineStr + yarim_value + " Oyla" +
+			newLineStr + yarim_status
+
 	out := ""
-	out += "\n  Tarih: " + pars(str, `tarih(.*?)>(.*?)<\/span>`, 2, "Son Güncellenme Tarihi : ")
-	out += "\n   Gram: " + pars(str, `row6_satis(.*?)>(.*?)<\/td>`, 2, "") + " " + gram_status + " " + gram_value + " Oy"
-	out += "\n Çeyrek: " + pars(str, `row11_satis(.*?)>(.*?)<\/td>`, 2, "") + " " + ceyrek_status + " " + ceyrek_value + " Oy"
-	out += "\n  Yarım: " + pars(str, `row12_satis(.*?)>(.*?)<\/td>`, 2, "") + " " + yarim_status + " " + yarim_value + " Oy"
+	out += "\n\n  Tarih: " + tarih
+	out += "\n\n   Gram: " + gram
+	out += "\n\n Çeyrek: " + ceyrek
+	out += "\n\n  Yarım: " + yarim
 	return out
 }
 
@@ -67,8 +85,8 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		out := generate()
 		p(out)
-    w.Header().Set("Content-Type", "text/html; charset=UTF-8")
-		fmt.Fprintln(w, "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><pre>" + out + "</pre>")
+		w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+		fmt.Fprintln(w, "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><pre style=\"font-size: 1.5em;\">"+out+"</pre>")
 	})
 
 	http.ListenAndServe(":6010", nil)
