@@ -86,7 +86,7 @@ func main() {
 		out := generate()
 		p(out)
 		w.Header().Set("Content-Type", "text/html; charset=UTF-8")
-		fmt.Fprintln(w, "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><pre style=\"font-size: 1.5em;\">"+out+"</pre>")
+		fmt.Fprintln(w, "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{background: #000; color: #fff;}</style><pre style=\"font-size: 1.5em;\">"+out+"</pre>")
 	})
 
 	http.ListenAndServe(":6010", nil)
