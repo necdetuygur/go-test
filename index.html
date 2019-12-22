@@ -5,3 +5,30 @@
 >
     Your browser doesn't support iframes
 </iframe>
+
+
+
+<script>
+      fetch('35.226.13.13:6010', {
+        method: 'GET',
+        headers: {
+            'Content-type': 'text/html'
+        }
+    })
+    .then(function(resp) {
+        if (resp.status == 200) {
+            console.log('OK');
+            return resp;
+        } else {
+            console.log('Network failure: ' + resp.status);
+        }
+    })
+    .then(function(a) {
+        console.log('JSON:');
+        console.log((a));
+    })
+    .catch(function(err) {
+        console.log('Error');
+        console.log(JSON.stringify(err));
+    });
+</script>
