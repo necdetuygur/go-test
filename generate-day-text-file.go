@@ -37,3 +37,5 @@ func main() {
 		fmt.Println(file + " available.")
 	}
 }
+
+// "C:\Program Files\Git\git-bash.exe" -c "cd ~/_/RPR/ && day &1 &"
