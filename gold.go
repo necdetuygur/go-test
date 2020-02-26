@@ -53,6 +53,10 @@ func generate() string {
 	yarim_status := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 2, "")
 	yarim_value := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 7, "")
 
+	str = get("https://finanswebde.com/altin/tam-altin")
+	tam_status := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 2, "")
+	tam_value := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 7, "")
+
 	str = get("http://www.ikd.sadearge.com/Firma/tablo.php")
 
 	tarih := pars(str, `tarih(.*?)>(.*?)<\/span>`, 2, "Son Güncellenme Tarihi : ")
@@ -72,11 +76,17 @@ func generate() string {
 			newLineStr + yarim_value + " Oyla" +
 			newLineStr + yarim_status
 
+	tam :=
+		pars(str, `row13_satis(.*?)>(.*?)<\/td>`, 2, "") + "TL" +
+			newLineStr + tam_value + " Oyla" +
+			newLineStr + tam_status
+
 	out := ""
 	out += "\n\n  Tarih: " + tarih
 	out += "\n\n   Gram: " + gram
 	out += "\n\n Çeyrek: " + ceyrek
 	out += "\n\n  Yarım: " + yarim
+	out += "\n\n    Tam: " + tam
 	return out
 }
 
@@ -94,5 +104,4 @@ func main() {
 	paus()
 }
 
-// go run gold.go
-// go build gold.go
+// go build gold.go && ./gold*
