@@ -8,6 +8,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"github.com/grokify/html-strip-tags-go" // => strip
 )
 
 func p(a string) {
@@ -41,9 +42,7 @@ func pars(str string, rgx string, key int, clr string) string {
 
 func generate() string {
 	str := get("https://www.sabah.com.tr/izmir-namaz-vakitleri")
-	out := 
-		pars(str, `(?ms)(.*?)<div class="vakitler boxShadowSet">(.*?)<\/div>(.*?)`, 2, "") +
-	""
+	out := strip.StripTags(pars(str, `(?ms)(.*?)<div class="vakitler boxShadowSet">(.*?)<\/div>(.*?)`, 2, " "))
 	return out
 }
 
