@@ -3,12 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/grokify/html-strip-tags-go" // => strip
 	"io/ioutil"
 	"net/http"
 	"os"
 	"regexp"
 	"strings"
-	"github.com/grokify/html-strip-tags-go" // => strip
 )
 
 func p(a string) {
@@ -27,7 +27,7 @@ func get(url string) string {
 }
 
 func paus() {
-	bufio.NewReader(os.Stdin).ReadString('\n')
+	_, _ = bufio.NewReader(os.Stdin).ReadString('\n')
 }
 
 func pars(str string, rgx string, key int, clr string) string {
@@ -43,6 +43,7 @@ func pars(str string, rgx string, key int, clr string) string {
 func generate() string {
 	str := get("https://www.sabah.com.tr/izmir-namaz-vakitleri")
 	out := strip.StripTags(pars(str, `(?ms)(.*?)<div class="vakitler boxShadowSet">(.*?)<\/div>(.*?)`, 2, " "))
+	out = regexp.MustCompile(`\r?\n\r?\n`).ReplaceAllString(strings.TrimSpace(out), "\n")
 	return out
 }
 
@@ -55,7 +56,7 @@ func main() {
 		fmt.Fprintln(w, "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{background: #000; color: #fff;}</style><pre style=\"font-size: 1.5em;\">"+out+"</pre>")
 	})
 
-	http.ListenAndServe(":8035", nil)
+	_ = http.ListenAndServe(":8035", nil)
 
 	paus()
 }
