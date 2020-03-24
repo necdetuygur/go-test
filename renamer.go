@@ -20,4 +20,4 @@ func main() {
 	}
 }
 
-go build renamer.go && ./renamer*
+// go build renamer.go && ./renamer*
