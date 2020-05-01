@@ -57,6 +57,24 @@ func generate() string {
 	tam_status := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 2, "")
 	tam_value := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 7, "")
 
+	str = get("https://finanswebde.com/doviz/USD")
+	usd_tl_pay := pars(str, `<div class="d-flex align-self-center justify-content-between my-2 py-1"><div class="detail-main-title"><span class="detail-title-sm">ALIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div><div class="detail-main-title"><span class="detail-title-sm">SATIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div>(.*?)<\/div>`, 1, "")
+	usd_tl_sell := pars(str, `<div class="d-flex align-self-center justify-content-between my-2 py-1"><div class="detail-main-title"><span class="detail-title-sm">ALIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div><div class="detail-main-title"><span class="detail-title-sm">SATIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div>(.*?)<\/div>`, 2, "")
+	usd_status := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 2, "")
+	usd_value := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 7, "")
+
+	str = get("https://finanswebde.com/doviz/EUR")
+	eur_tl_pay := pars(str, `<div class="d-flex align-self-center justify-content-between my-2 py-1"><div class="detail-main-title"><span class="detail-title-sm">ALIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div><div class="detail-main-title"><span class="detail-title-sm">SATIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div>(.*?)<\/div>`, 1, "")
+	eur_tl_sell := pars(str, `<div class="d-flex align-self-center justify-content-between my-2 py-1"><div class="detail-main-title"><span class="detail-title-sm">ALIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div><div class="detail-main-title"><span class="detail-title-sm">SATIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div>(.*?)<\/div>`, 2, "")
+	eur_status := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 2, "")
+	eur_value := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 7, "")
+
+	str = get("https://finanswebde.com/doviz/GBP")
+	gbp_tl_pay := pars(str, `<div class="d-flex align-self-center justify-content-between my-2 py-1"><div class="detail-main-title"><span class="detail-title-sm">ALIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div><div class="detail-main-title"><span class="detail-title-sm">SATIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div>(.*?)<\/div>`, 1, "")
+	gbp_tl_sell := pars(str, `<div class="d-flex align-self-center justify-content-between my-2 py-1"><div class="detail-main-title"><span class="detail-title-sm">ALIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div><div class="detail-main-title"><span class="detail-title-sm">SATIŞ <\/span> <span class="detail-title-md "><nobr>(.*?)<\/nobr><\/span><\/div>(.*?)<\/div>`, 2, "")
+	gbp_status := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 2, "")
+	gbp_value := pars(str, `<div class="col-md-6"><span class="detail-change(.*?)>(.*?)<!--(.*?)<\/span>(.*?)<span(.*?)class=\"detail-title-sm\">(.*?)<span>(.*?)<\/span>(.*?)<\/span>(.*?)`, 7, "")
+
 	str = get("http://www.ikd.sadearge.com/Firma/tablo.php")
 
 	tarih := pars(str, `tarih(.*?)>(.*?)<\/span>`, 2, "Son Güncellenme Tarihi : ")
@@ -81,12 +99,33 @@ func generate() string {
 			newLineStr + tam_value + " Oyla" +
 			newLineStr + tam_status
 
+	usd :=
+		"Alış: " + usd_tl_pay + "TL" +
+		newLineStr + "Satış: " + usd_tl_sell + "TL" +
+			newLineStr + usd_value + " Oyla" +
+			newLineStr + usd_status
+
+	eur :=
+		"Alış: " + eur_tl_pay + "TL" +
+		newLineStr + "Satış: " + eur_tl_sell + "TL" +
+			newLineStr + eur_value + " Oyla" +
+			newLineStr + eur_status
+
+	gbp :=
+		"Alış: " + gbp_tl_pay + "TL" +
+		newLineStr + "Satış: " + gbp_tl_sell + "TL" +
+			newLineStr + gbp_value + " Oyla" +
+			newLineStr + gbp_status
+
 	out := ""
 	out += "\n\n  Tarih: " + tarih
 	out += "\n\n   Gram: " + gram
 	out += "\n\n Çeyrek: " + ceyrek
 	out += "\n\n  Yarım: " + yarim
 	out += "\n\n    Tam: " + tam
+	out += "\n\n    USD: " + usd
+	out += "\n\n    EUR: " + eur
+	out += "\n\n    GBP: " + gbp
 	return out
 }
 
