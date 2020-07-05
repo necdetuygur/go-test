@@ -1,9 +1,9 @@
 {
-  "short_name": "<?TITLE?>",
-  "name": "<?TITLE?>",
+  "short_name": "Altın Fiyatları",
+  "name": "Altın Fiyatları",
   "lang": "tr",
-  "description": "<?TITLE?>",
-  "start_url": "<?WEBPAGEURL?>",
+  "description": "Altın Fiyatları",
+  "start_url": "https://necdetuygur.github.io/go-test/",
   "background_color": "#000000",
   "theme_color": "#000000",
   "dir": "ltr",
